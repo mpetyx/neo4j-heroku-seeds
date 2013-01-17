@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+  <link rel="stylesheet" media="screen" href="/style.css"/>
+</head>
+<body>
+<div id="header">
+  <a href="https://github.com/neo4j-contrib/neo4j-heroku-seeds"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+  <h1>Neo4 sample app</h1>
+</div>
+<div id="content">
+
+  <p>The text below is from Neo4j:</p>
+  <div id="generated">
+    <%= @row[0][:data][:name] %> <%= @row[1][:type] %> <%= @row[2][:data][:name] %>
+  </div>
+  <hr/>
+  <h2>Cypher query</h2>
+
+  <p>Considering all nodes, find the pattern where some 'n' node has a 'loves' relationship to some 'm' node...</p>
+  <pre><%= @cypher_query %></pre>
+  <h2>Result</h2>
+
+  <p>In the result row, node 'n' is at row[0], relationship 'r' at row[1] and node 'm' at row[2].
+    Look for the 'self' properties, which indicate the identity URL of each entity.
+  </p>
+
+  <p>Raw JSON result row...</p>
+  <pre><%= JSON.pretty_generate(@row) %></pre>
+</div>
+</body>
+</html>

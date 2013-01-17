@@ -1,0 +1,22 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+}
+h1 {
+    text-align: center;
+}
+pre {
+    font-family: Courier, monospace;
+    font-size: small;
+}
+
+#header {
+    height: 150px;
+
+}
+#generated {
+    border-style: solid;
+    background: lightgray;
+    text-align: center;
+    width: 30pc;;
+
+}
