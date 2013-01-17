@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 git rm --cached .
 git commit -am "detached ${PWD}"
 git init .
