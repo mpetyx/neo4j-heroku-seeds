@@ -5,7 +5,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 
-neo4j_uri = URI(ENV['NEO4J_URL'] || 'http://localhost:7474')
+neo4j_uri = URI(ENV['NEO4J_URL'] || 'http://localhost:7474') # This is how Heroku tells us about the app.
 neo = Neography::Rest.new(neo4j_uri.to_s) # Neography expects a string
 
 def check_for_neo4j(neo4j_uri)
@@ -31,8 +31,9 @@ def create_graph(neo)
   # a node and square brackets to indicate a relationship.
 
   # 1. get the 'from' node, which we expect to be named "Neo4j"
-  from = neo.get_root # we'll use the root node as the 'from'
-  puts from.inspect
+  from = neo.get_root
+  # we'll use the root node as the 'from'
+  # this isn't recommended for production use.
 
   # 2. get the properties of the 'from' node
   properties = neo.get_node_properties(from)
