@@ -1,12 +1,22 @@
 import os
 from flask import Flask
 from py2neo import neo4j, cypher
+from urlparse import urlparse
 
 # this is how Heroku tells your app where to find the database.
-NEO4J_URL= os.environ.get('NEO4J_URL', "http://localhost:7474") + "/db/data/"
+
+
+if os.environ.get('NEO4J_URL'):
+    graph_db_url = urlparse(os.environ.get('NEO4J_URL'))
+    # set up authentication parameters
+    neo4j.authenticate("{host}:{port}".format(host=graph_db_url.hostname, port=graph_db_url.port), graph_db_url.username, graph_db_url.password)
+
+    # connect to authenticated graph database
+    graph_db = neo4j.GraphDatabaseService('http://{host}:{port}/db/data'.format(host=graph_db_url.hostname, port=graph_db_url.port))
+else:
+    graph_db = neo4j.GraphDatabaseService('http://localhost:7474/db/data')
 
 def create_graph(graph_db):
-    print("Creating graph on: " + NEO4J_URL)
 
     # Do we have a node that has a 'name' property, which is set to the value 'Neo'?
     # We've probably been here before.
@@ -30,7 +40,7 @@ def find_lovers(graph_db):
     # and RETURN the starting node, the relationship, and the end node.
     data, metadata = cypher.execute(graph_db, query)
     return data[0]
-    
+
 app = Flask(__name__)
 app.debug = True
 
@@ -43,7 +53,7 @@ def hello():
 
 if __name__ == '__main__':
     # Connect to the database
-    graph_db = neo4j.GraphDatabaseService(NEO4J_URL)
+
     # Make sure our reference data is there
     create_graph(graph_db)
     port = int(os.environ.get('PORT', 5000))
