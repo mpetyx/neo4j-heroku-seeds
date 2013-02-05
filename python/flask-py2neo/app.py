@@ -11,7 +11,7 @@ def create_graph(graph_db):
     # Do we have a node that has a 'name' property, which is set to the value 'Neo'?
     # We've probably been here before.
     data, metadata = cypher.execute(graph_db, "START n=node(*) where n.name?='Neo' return n")
-    if (len(data) != 0):
+    if data:
         # Create two nodes, one for us and one for you.
         # Make sure they both have 'name' properties with values.
         from_node, to_node = graph_db.create({"name": "neo4j"}, {"name": "you"})
@@ -39,7 +39,7 @@ def hello():
     # Query the database
     result = find_lovers(graph_db)
     # Pull out the data we want from the single row of results
-    return "%s %s %s" % (result[0]['name'], result[1].type,  result[2]['name'] )
+    return "{0} {1} {2}".format(result[0]['name'], result[1].type,  result[2]['name'] )
 
 if __name__ == '__main__':
     # Connect to the database
