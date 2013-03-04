@@ -29,7 +29,16 @@ def create_graph(graph_db):
         # create a 'loves' relationship from the 'from' node to the 'to' node
         from_node.create_relationship_to(to_node, "loves")
 
-    # To learn more, read the excellent Neo4j Manual at http://docs.neo4j.org
+    data, metadata = cypher.execute(graph_db, "START n=node(*) where n.name?='Michael' return n")
+    if data:
+            # Create two nodes, one for us and one for you.
+            # Make sure they both have 'name' properties with values.
+            from_node, to_node = graph_db.create({"name": "michael"}, {"name": "helen"})
+            
+            # create a 'loves' relationship from the 'from' node to the 'to' node
+            from_node.create_relationship_to(to_node, "loves")
+
+            # To learn more, read the excellent Neo4j Manual at http://docs.neo4j.org
 
 
 def find_lovers(graph_db):
@@ -39,13 +48,20 @@ def find_lovers(graph_db):
     # MATCH the ones that have a LOVES relationship
     # and RETURN the starting node, the relationship, and the end node.
     data, metadata = cypher.execute(graph_db, query)
-    return data[0]
+    return data[len(data)-1]
 
 app = Flask(__name__)
 app.debug = True
 
 @app.route('/')
 def hello():
+    # Query the database
+    result = find_lovers(graph_db)
+    # Pull out the data we want from the single row of results
+    return "{0} {1} {2}".format(result[0]['name'], result[1].type,  result[2]['name'] )
+
+@app.route('/love/')
+def love():
     # Query the database
     result = find_lovers(graph_db)
     # Pull out the data we want from the single row of results
